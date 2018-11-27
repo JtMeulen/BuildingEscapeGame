@@ -15,3 +15,5 @@
 
 .vs/
 *VC.db
+*.uasset
+!BP_*.uasset
