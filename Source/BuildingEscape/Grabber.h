@@ -24,6 +24,8 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	void DisplayDebugLine(FVector & PlayerViewPointLocation, FVector LineTraceEnd);
+
 	void DisplayDebugLine(FVector &PlayerViewPointLocation, FRotator &PlayerViewPointRotator);
 
 private:

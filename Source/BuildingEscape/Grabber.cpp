@@ -3,6 +3,7 @@
 #include "Grabber.h"
 #include "Engine/World.h"
 #include "Public/DrawDebugHelpers.h"
+#include "Public/CollisionQueryParams.h"
 #include "GameFramework/PlayerController.h"
 
 #define OUT
@@ -29,25 +30,43 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// Get the player viewpoint this tick
+	/// Get the player viewpoint this tick
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotator;
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
 		OUT PlayerViewPointLocation,
 		OUT PlayerViewPointRotator
 	);
+	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotator.Vector() * Reach;
 
-	// Ray-castout to reach distance
+	/// Setup query parameters
+	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
 
-	// See what we hit
+	/// Line-trace (AKA Ray-cast) out to reach distance
+	FHitResult Hit;	
+	GetWorld()->LineTraceSingleByObjectType(
+		OUT Hit,
+		PlayerViewPointLocation,
+		LineTraceEnd,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		TraceParameters
+	);
+		
+	/// See what we hit
+	AActor* ActorHit = Hit.GetActor();
+	if (ActorHit)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *(ActorHit->GetName()));
+	}
+	
 
-	// Debug line is to be toggled from the unreal editor inside the Grabber component
-	if (ShouldDisplayDebugLine) { DisplayDebugLine(PlayerViewPointLocation, PlayerViewPointRotator); }
+	/// Debug line is to be toggled from the unreal editor inside the Grabber component
+	if (ShouldDisplayDebugLine) { DisplayDebugLine(PlayerViewPointLocation, LineTraceEnd); }
 }
 
-void UGrabber::DisplayDebugLine(FVector &PlayerViewPointLocation, FRotator &PlayerViewPointRotator)
+void UGrabber::DisplayDebugLine(FVector &PlayerViewPointLocation, FVector LineTraceEnd)
 {
-	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotator.Vector() * Reach;
+	
 	DrawDebugLine(
 		GetWorld(),
 		PlayerViewPointLocation,
