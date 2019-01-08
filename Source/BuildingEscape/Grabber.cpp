@@ -4,7 +4,9 @@
 #include "Engine/World.h"
 #include "Public/DrawDebugHelpers.h"
 #include "Public/CollisionQueryParams.h"
+#include "GameFramework/Actor.h"
 #include "GameFramework/PlayerController.h"
+#include "Components/InputComponent.h"
 
 #define OUT
 
@@ -22,6 +24,27 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty"));
+
+	/// Look for attached Physics Handle
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if (PhysicsHandle)
+	{
+		// Found the PysicsHandle
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No PysicsHandle found for %s"), *GetOwner()->GetName());
+	} 
+
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (InputComponent)
+	{
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No Input handler found for %s"), *GetOwner()->GetName());
+	}
 }
 
 
@@ -77,5 +100,10 @@ void UGrabber::DisplayDebugLine(FVector &PlayerViewPointLocation, FVector LineTr
 		0.f,
 		10.f
 	);
+}
+
+void UGrabber::Grab()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Grab Pressed"));
 }
 

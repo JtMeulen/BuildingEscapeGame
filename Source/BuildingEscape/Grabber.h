@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Grabber.generated.h"
 
 
@@ -24,9 +25,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void DisplayDebugLine(FVector & PlayerViewPointLocation, FVector LineTraceEnd);
-
-	void DisplayDebugLine(FVector &PlayerViewPointLocation, FRotator &PlayerViewPointRotator);
+	void DisplayDebugLine(FVector &PlayerViewPointLocation, FVector LineTraceEnd);
 
 private:
 	// How far ahead of the player can we reach in cm
@@ -36,4 +35,11 @@ private:
 	// Should Show the debugline
 	UPROPERTY(EditAnywhere)
 	bool ShouldDisplayDebugLine = false;
+
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+
+	UInputComponent* InputComponent = nullptr;
+
+	// Ray-cast and grab what's in reach
+	void Grab();
 };
