@@ -17,29 +17,28 @@ public:
 	// Sets default values for this component's properties
 	UGrabber();
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void DisplayDebugLine(FVector &PlayerViewPointLocation, FVector LineTraceEnd);
+	FHitResult GetFirstPhysicsBodyInReach() const;
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
 
 private:
 	// How far ahead of the player can we reach in cm
 	UPROPERTY(EditAnywhere)
 	float Reach = 100.f;
 
-	// Should Show the debugline
-	UPROPERTY(EditAnywhere)
-	bool ShouldDisplayDebugLine = false;
-
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
-
 	UInputComponent* InputComponent = nullptr;
 
 	// Ray-cast and grab what's in reach
 	void Grab();
+	void Release();
+
+	// Find attached physics handler
+	void FindPhysicsHandleComponent();
+	void SetupInputComponent();
 };
