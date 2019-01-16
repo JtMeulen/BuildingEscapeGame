@@ -69,6 +69,17 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		OUT PlayerViewPointRotator
 	);
 	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotator.Vector() * Reach;
+	
+	/// Check if Actor with physicsBody is in reach to set the crosshair variable to true
+	auto  ActorHit = GetFirstPhysicsBodyInReach().GetActor();
+	if (ActorHit) 
+	{ 
+		ReachableObject = "true"; 
+	}
+	else 
+	{ 
+		ReachableObject = "false"; 
+	}
 
 	if (PhysicsHandle->GrabbedComponent)
 	{
@@ -99,7 +110,6 @@ void UGrabber::Grab()
 void UGrabber::Release()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Released"));
-	// TODO release physics handke
 	PhysicsHandle->ReleaseComponent();
 }
 
@@ -128,11 +138,11 @@ FHitResult UGrabber::GetFirstPhysicsBodyInReach() const
 	);
 
 	/// See what we hit
-	AActor* ActorHit = Hit.GetActor();
-	if (ActorHit)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *(ActorHit->GetName()));
-	}
+	// AActor* ActorHit = Hit.GetActor();
+	// if (ActorHit)
+	// {
+	//	UE_LOG(LogTemp, Warning, TEXT("Line trace hit: %s"), *(ActorHit->GetName()));
+	// }
 
 	return Hit;
 }

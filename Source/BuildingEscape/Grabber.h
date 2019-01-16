@@ -22,6 +22,9 @@ public:
 
 	FHitResult GetFirstPhysicsBodyInReach() const;
 
+	UPROPERTY(VisibleAnywhere)
+	FString ReachableObject  = "true";
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
