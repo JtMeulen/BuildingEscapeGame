@@ -22,8 +22,8 @@ public:
 
 	FHitResult GetFirstPhysicsBodyInReach() const;
 
-	UPROPERTY(VisibleAnywhere)
-	FString ReachableObject  = "true";
+	UPROPERTY(BluePrintReadWrite, VisibleAnywhere)
+	bool ReachableObject  = false;
 
 protected:
 	// Called when the game starts

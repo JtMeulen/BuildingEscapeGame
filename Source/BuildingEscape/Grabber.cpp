@@ -74,11 +74,11 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	auto  ActorHit = GetFirstPhysicsBodyInReach().GetActor();
 	if (ActorHit) 
 	{ 
-		ReachableObject = "true"; 
+		ReachableObject = true; 
 	}
 	else 
 	{ 
-		ReachableObject = "false"; 
+		ReachableObject = false; 
 	}
 
 	if (PhysicsHandle->GrabbedComponent)
