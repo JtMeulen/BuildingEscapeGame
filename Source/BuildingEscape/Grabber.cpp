@@ -99,6 +99,12 @@ void UGrabber::Grab()
 	/// If we hit something then attach a physics handle
 	if (ActorHit)
 	{
+		if (ActorHit->GetName() == "TV_SCREEN_OFF_6")
+		{
+			UE_LOG(LogTemp, Warning, TEXT("TOGGLETV"));
+			toggleTVScreen = !toggleTVScreen;
+		}
+
 		PhysicsHandle->GrabComponentAtLocationWithRotation(
 			ComponentToGrab, 
 			NAME_None, 

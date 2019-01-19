@@ -25,6 +25,9 @@ public:
 	UPROPERTY(BluePrintReadWrite, VisibleAnywhere)
 	bool ReachableObject  = false;
 
+	UPROPERTY(BluePrintReadWrite, VisibleAnywhere)
+	bool toggleTVScreen = false;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
