@@ -28,6 +28,9 @@ public:
 	UPROPERTY(BluePrintReadWrite, VisibleAnywhere)
 	bool toggleTVScreen = false;
 
+	UPROPERTY(BluePrintReadWrite, VisibleAnywhere)
+	bool toggleLight = true;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

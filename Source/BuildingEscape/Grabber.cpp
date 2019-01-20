@@ -101,15 +101,21 @@ void UGrabber::Grab()
 	{
 		if (ActorHit->GetName() == "TV_SCREEN_OFF_6")
 		{
-			UE_LOG(LogTemp, Warning, TEXT("TOGGLETV"));
 			toggleTVScreen = !toggleTVScreen;
 		}
-
-		PhysicsHandle->GrabComponentAtLocationWithRotation(
-			ComponentToGrab, 
-			NAME_None, 
-			ComponentToGrab->GetOwner()->GetActorLocation(), 
-			ComponentToGrab->GetOwner()->GetActorRotation());
+		else if (ActorHit->GetName() == "LightSwitch")
+		{
+			UE_LOG(LogTemp, Warning, TEXT("light toggle"));
+			toggleLight = !toggleLight;
+		}
+		else 
+		{
+			PhysicsHandle->GrabComponentAtLocationWithRotation(
+				ComponentToGrab,
+				NAME_None,
+				ComponentToGrab->GetOwner()->GetActorLocation(),
+				ComponentToGrab->GetOwner()->GetActorRotation());
+		}		
 	}
 }
 
