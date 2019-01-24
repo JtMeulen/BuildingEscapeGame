@@ -5,6 +5,10 @@
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
 #include "Math/Rotator.h"
+#include "Components/PrimitiveComponent.h"
+#include <math.h>
+
+#define OUT
 
 // Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
@@ -23,7 +27,6 @@ void UOpenDoor::BeginPlay()
 	Super::BeginPlay();
 		
 	Owner = GetOwner(); // Find the owning Actor
-	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn(); // Find the player
 }
 
 void UOpenDoor::OpenDoor()
@@ -42,7 +45,8 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// If the ActerThatOpens is in the volume, then set LastDoorOpenTime for checking when door should close
-	if (PressurePlate && PressurePlate->IsOverlappingActor(ActorThatOpens)) 
+	//if (PressurePlate_chair && PressurePlate_table && PressurePlate_chair->IsOverlappingActor(ActorThatOpens) && PressurePlate_table->IsOverlappingActor(ActorThatOpens))
+	if (GetTotalWeightOnPlateChair() == 30.f && GetTotalWeightOnPlateTable() == 60.f)
 	{
 		OpenDoor();
 		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
@@ -55,3 +59,37 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 }
 
+float UOpenDoor::GetTotalWeightOnPlateChair()
+{
+	float TotalMass = 0.f;
+
+	if (PressurePlate_chair == nullptr) return TotalMass;
+
+	// Find all the overlapping actors
+	TArray<AActor*> OverlappingActors;
+	PressurePlate_chair->GetOverlappingActors(OUT OverlappingActors);
+	for (const auto* Actor : OverlappingActors)
+	{
+		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		UE_LOG(LogTemp, Warning, TEXT("weight: %f"), TotalMass)
+	}
+
+	return round(TotalMass);
+}
+
+float UOpenDoor::GetTotalWeightOnPlateTable()
+{
+	float TotalMass = 0.f;
+
+	if (PressurePlate_table == nullptr) return TotalMass;
+
+	// Find all the overlapping actors
+	TArray<AActor*> OverlappingActors;
+	PressurePlate_table->GetOverlappingActors(OUT OverlappingActors);
+	for (const auto* Actor : OverlappingActors)
+	{
+		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+	}
+
+	return round(TotalMass);
+}
