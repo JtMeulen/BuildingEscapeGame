@@ -29,36 +29,19 @@ void UOpenDoor::BeginPlay()
 	Owner = GetOwner(); // Find the owning Actor
 }
 
-void UOpenDoor::OpenDoor()
-{
-	if (!Owner) { return; }
-	Owner->SetActorRotation(FRotator(0.0f, OpenAngle, 0.0f));
-}
-
-void UOpenDoor::CloseDoor()
-{
-	if (!Owner) { return; }
-	Owner->SetActorRotation(FRotator(0.0f, ClosedAngle, 0.0f));
-}
-
 // Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// If the ActerThatOpens is in the volume, then set LastDoorOpenTime for checking when door should close
-	//if (PressurePlate_chair && PressurePlate_table && PressurePlate_chair->IsOverlappingActor(ActorThatOpens) && PressurePlate_table->IsOverlappingActor(ActorThatOpens))
 	if (GetTotalWeightOnPlateChair() == 30.f && GetTotalWeightOnPlateTable() == 60.f)
 	{
-		OpenDoor();
-		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
+		OnOpen.Broadcast();
 	}	
-	
-	// Check if the door should close after delay
-	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay) {
-		CloseDoor();
+	else
+	{
+		OnClose.Broadcast();
 	}
-
 }
 
 float UOpenDoor::GetTotalWeightOnPlateChair()
@@ -73,7 +56,6 @@ float UOpenDoor::GetTotalWeightOnPlateChair()
 	for (const auto* Actor : OverlappingActors)
 	{
 		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
-		UE_LOG(LogTemp, Warning, TEXT("weight: %f"), TotalMass)
 	}
 
 	return round(TotalMass);
