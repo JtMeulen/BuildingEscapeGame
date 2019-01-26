@@ -36,17 +36,17 @@ private:
 	float ClosedAngle = 180.0f;
 	
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume* PressurePlate_chair;
+	ATriggerVolume* PressurePlate_chair = nullptr;
 
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume* PressurePlate_table;
+	ATriggerVolume* PressurePlate_table = nullptr;
 
 	UPROPERTY(EditAnywhere)
 	float DoorCloseDelay = 1.0f;
 
 	float LastDoorOpenTime;
 
-	AActor* Owner;
+	AActor* Owner = nullptr;
 
 	float GetTotalWeightOnPlateChair();
 	float GetTotalWeightOnPlateTable();

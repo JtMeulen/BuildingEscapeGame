@@ -31,11 +31,13 @@ void UOpenDoor::BeginPlay()
 
 void UOpenDoor::OpenDoor()
 {
+	if (!Owner) { return; }
 	Owner->SetActorRotation(FRotator(0.0f, OpenAngle, 0.0f));
 }
 
 void UOpenDoor::CloseDoor()
 {
+	if (!Owner) { return; }
 	Owner->SetActorRotation(FRotator(0.0f, ClosedAngle, 0.0f));
 }
 
@@ -63,7 +65,7 @@ float UOpenDoor::GetTotalWeightOnPlateChair()
 {
 	float TotalMass = 0.f;
 
-	if (PressurePlate_chair == nullptr) return TotalMass;
+	if (!PressurePlate_chair) { return TotalMass; };
 
 	// Find all the overlapping actors
 	TArray<AActor*> OverlappingActors;
@@ -81,7 +83,7 @@ float UOpenDoor::GetTotalWeightOnPlateTable()
 {
 	float TotalMass = 0.f;
 
-	if (PressurePlate_table == nullptr) return TotalMass;
+	if (!PressurePlate_table) { return TotalMass; };
 
 	// Find all the overlapping actors
 	TArray<AActor*> OverlappingActors;

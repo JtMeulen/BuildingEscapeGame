@@ -77,6 +77,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		ReachableObject = false; 
 	}
 
+	if (!PhysicsHandle) { return; }
 	if (PhysicsHandle->GrabbedComponent)
 	{
 		PhysicsHandle->SetTargetLocationAndRotation(LineTraceEnd, PlayerViewPointRotator);
@@ -104,6 +105,7 @@ void UGrabber::Grab()
 		}
 		else 
 		{
+			if (!PhysicsHandle) { return; }
 			PhysicsHandle->GrabComponentAtLocationWithRotation(
 				ComponentToGrab,
 				NAME_None,
@@ -115,6 +117,7 @@ void UGrabber::Grab()
 
 void UGrabber::Release()
 {
+	if (!PhysicsHandle) { return; }
 	PhysicsHandle->ReleaseComponent();
 }
 
